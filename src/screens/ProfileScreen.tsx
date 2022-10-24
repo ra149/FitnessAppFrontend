@@ -1,10 +1,13 @@
 import { View, Text } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
+import Button from '../components/CustomButton';
+import AuthContext, { AuthContextType } from '../context/AuthContext';
 
 const ProfileScreen = () => {
+  const { logout } = useContext(AuthContext) as AuthContextType;
   return (
     <View>
-      <Text>ProfileScreen</Text>
+      <Button onPress={logout} />
     </View>
   );
 };

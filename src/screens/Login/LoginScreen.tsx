@@ -5,19 +5,23 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
+  TextInput,
+  ActivityIndicator,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
 import { Background } from '../../../assets';
 import { Logo } from '../../../assets';
-import { TextInput } from 'react-native-gesture-handler';
 import Button from '../../components/CustomButton';
 import { styles } from './style';
+import AuthContext, { AuthContextType } from '../../context/AuthContext';
 
 const LoginScreen = () => {
-  const navigation = useNavigation();
   const [isFocusedUsername, setIsFocusedUsername] = useState(false);
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { isLoading, login } = useContext(AuthContext) as AuthContextType;
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -39,6 +43,7 @@ const LoginScreen = () => {
               onBlur={() => setIsFocusedUsername(false)}
               placeholder="Email"
               placeholderTextColor="white"
+              onChangeText={setEmail}
             />
             <TextInput
               style={[
@@ -50,12 +55,14 @@ const LoginScreen = () => {
               placeholderTextColor="white"
               placeholder="Password"
               secureTextEntry
+              onChangeText={setPassword}
             />
             <TouchableOpacity style={{ alignItems: 'center' }}>
               <Text style={styles.forgotPassword}>Forgot your password?</Text>
             </TouchableOpacity>
             <View style={{ alignContent: 'center', alignItems: 'center' }}>
-              <Button title={'Login'} />
+              <Button title="Login" onPress={() => login(email, password)} />
+              <ActivityIndicator animating={isLoading} />
             </View>
           </View>
           <View style={styles.imageContainer}>

@@ -6,6 +6,8 @@ const defaultHeaders = {
   'Content-type': 'application/json',
 };
 
+export const URL: string = 'https://octanefitgarage.com/api/api';
+
 class Network {
   service: any;
 
@@ -26,8 +28,8 @@ class Network {
       (response) => response.data,
       (error) => Promise.reject(error)
     );
-		// @ts-expect-error
-		service.defaults.headers = defaultHeaders;
+    // @ts-expect-error
+    service.defaults.headers = defaultHeaders;
     this.service = service;
   }
 

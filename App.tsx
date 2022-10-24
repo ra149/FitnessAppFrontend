@@ -2,20 +2,23 @@ import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import RootNavigator from './src/navigation/RootNavigator';
-import { useLoadFont } from './src/utils/useFont';
+import { useLoadFont } from './src/hooks/useFont';
+import { AuthProvider } from './src/context/AuthContext';
 
 export default function App() {
-	const { fonts, loadFonts } = useLoadFont();
+  const { fonts, loadFonts } = useLoadFont();
 
-	useEffect(() => {
-		loadFonts();
-	}, []);
+  useEffect(() => {
+    loadFonts();
+  }, []);
 
   if (fonts) {
     return (
-      <NavigationContainer>
-        <RootNavigator />
-      </NavigationContainer>
+      <AuthProvider>
+        <NavigationContainer>
+          <RootNavigator />
+        </NavigationContainer>
+      </AuthProvider>
     );
   }
 }
