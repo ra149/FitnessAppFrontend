@@ -1,12 +1,15 @@
 import React from 'react';
 import { Text, View, StyleSheet, Pressable } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Button(props: any) {
   const { onPress, title } = props;
   return (
-    <Pressable style={styles.button} onPress={onPress}>
-      <Text style={styles.text}>{title}</Text>
-    </Pressable>
+    <LinearGradient colors={['#49FFFF', '#2AACE3']} style={styles.button}>
+      <Pressable onPress={onPress}>
+        <Text style={styles.text}>{title}</Text>
+      </Pressable>
+    </LinearGradient>
   );
 }
 

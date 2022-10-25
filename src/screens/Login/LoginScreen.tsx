@@ -62,7 +62,11 @@ const LoginScreen = () => {
             </TouchableOpacity>
             <View style={{ alignContent: 'center', alignItems: 'center' }}>
               <Button title="Login" onPress={() => login(email, password)} />
-              <ActivityIndicator animating={isLoading} />
+              <ActivityIndicator
+                animating={isLoading}
+                size="large"
+                color="white"
+              />
             </View>
           </View>
           <View style={styles.imageContainer}>

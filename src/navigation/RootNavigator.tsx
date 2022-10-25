@@ -10,9 +10,7 @@ const RootNavigator = () => {
   const Stack = createNativeStackNavigator();
   const { token } = useContext(AuthContext) as AuthContextType;
 
-  useEffect(() => {
-		
-	}, [token]);
+  useEffect(() => {}, [token]);
   return (
     <Stack.Navigator>
       {token == false ? (

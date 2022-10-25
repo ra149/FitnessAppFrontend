@@ -4,8 +4,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { Colors } from '../constants/Colors';
 import { Icon } from '@rneui/themed';
-import ProfileScreen from '../screens/ProfileScreen';
+import ProfileScreen from '../screens/Profile/ProfileScreen';
 import WorkoutsScreen from '../screens/WorkoutsScreen';
+import { color } from '@rneui/base';
 
 const Tab = createBottomTabNavigator();
 
@@ -23,6 +24,7 @@ const TabNavigator = () => {
       screenOptions={({ route }) => ({
         tabBarActiveTintColor: Colors.TabActive,
         tabBarInactiveTintColor: Colors.TabInactive,
+        tabBarStyle: { backgroundColor: '#272C31' },
         tabBarIcon: ({ focused, color, size }) => {
           if (route.name === 'Profile') {
             return (
@@ -44,8 +46,16 @@ const TabNavigator = () => {
         },
       })}
     >
-      <Tab.Screen name="Profile" component={ProfileScreen} />
-      <Tab.Screen name="Training" component={WorkoutsScreen} />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Training"
+        component={WorkoutsScreen}
+        options={{ headerShown: false }}
+      />
     </Tab.Navigator>
   );
 };

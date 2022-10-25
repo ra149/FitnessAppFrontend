@@ -1,5 +1,11 @@
-import { View, Text } from 'react-native';
-import React, { createContext, ReactNode, useMemo, useState } from 'react';
+import { View, Text, Alert } from 'react-native';
+import React, {
+  createContext,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Network, { URL } from '../../Network';
 
@@ -31,13 +37,21 @@ export const AuthProvider = ({ children }: Props) => {
       .then((res: any) => {
         let token = res.access_token;
         console.log(res);
-        AsyncStorage.setItem('Authorization-token', token);
-        setIsLoading(false);
-        setToken(true);
+        console.log(token, 'token');
+        if (token != undefined) {
+          AsyncStorage.setItem('Authorization-token', token);
+          setIsLoading(false);
+          setToken(true);
+        } else {
+          setIsLoading(false);
+          setToken(false);
+          Alert.alert('Error', 'Bad credentials');
+        }
       })
       .catch((e: any) => {
-        console.log(e);
+        console.log('usao');
         setIsLoading(false);
+        setToken(false);
       });
   };
 
@@ -61,6 +75,19 @@ export const AuthProvider = ({ children }: Props) => {
     console.log('loged out');
     console.log(AsyncStorage.getItem('Authorization-token'));
   };
+
+  const restoreSession = () => {
+    AsyncStorage.getItem('Authorization-token').then((storedToken) => {
+      if (storedToken) {
+        setToken(true);
+        return;
+      }
+    });
+  };
+
+  useEffect(() => {
+    restoreSession();
+  }, []);
 
   const values = useMemo(
     () => ({
