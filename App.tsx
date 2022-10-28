@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import RootNavigator from './src/navigation/RootNavigator';
-import { useLoadFont } from './src/hooks/useFont';
+import { useLoadFont } from './src/hooks/useFontHook';
 import { AuthProvider } from './src/context/AuthContext';
 
 export default function App() {

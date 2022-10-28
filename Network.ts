@@ -15,11 +15,6 @@ class Network {
     const service = axios.create();
     service.interceptors.request.use(
       async (service: any) => {
-        const accessToken = await AsyncStorage.getItem('authToken');
-        if (accessToken) {
-          service.headers.Authorization = `Authorization-token ${accessToken}`;
-        }
-
         return service;
       },
       (error) => Promise.reject(error)
@@ -45,9 +40,15 @@ class Network {
         return Promise.reject(error);
       });
   }
-  get(path: string) {
+  async get(path: string) {
+    const accessToken = await AsyncStorage.getItem('Authorization-token');
+    console.log(accessToken);
     return this.service
-      .get(path)
+      .get(path, {
+        headers: {
+          'Authorization-token': accessToken,
+        },
+      })
       .then((response: any) => response)
       .catch((error: any) => Promise.reject(error));
   }
