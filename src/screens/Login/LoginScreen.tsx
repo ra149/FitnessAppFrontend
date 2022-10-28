@@ -57,7 +57,10 @@ const LoginScreen = () => {
               secureTextEntry
               onChangeText={setPassword}
             />
-            <TouchableOpacity style={{ alignItems: 'center' }}>
+            <TouchableOpacity
+              style={{ alignItems: 'center' }}
+              onPress={() => console.log('jebe')}
+            >
               <Text style={styles.forgotPassword}>Forgot your password?</Text>
             </TouchableOpacity>
             <View style={{ alignContent: 'center', alignItems: 'center' }}>
