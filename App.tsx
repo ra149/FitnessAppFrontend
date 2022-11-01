@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import RootNavigator from './src/navigation/RootNavigator';
 import { useLoadFont } from './src/hooks/useFontHook';
 import { AuthProvider } from './src/context/AuthContext';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 export default function App() {
   const { fonts, loadFonts } = useLoadFont();
@@ -14,11 +15,13 @@ export default function App() {
 
   if (fonts) {
     return (
-      <AuthProvider>
-        <NavigationContainer>
-          <RootNavigator />
-        </NavigationContainer>
-      </AuthProvider>
+      <BottomSheetModalProvider>
+        <AuthProvider>
+          <NavigationContainer>
+            <RootNavigator />
+          </NavigationContainer>
+        </AuthProvider>
+      </BottomSheetModalProvider>
     );
   }
 }

@@ -1,5 +1,12 @@
-import { View, Text, Image } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, Image, Alert, Pressable, TextInput } from 'react-native';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import AuthContext, { AuthContextType } from '../../context/AuthContext';
 import { styles } from './style';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -16,6 +23,10 @@ import dayjs from 'dayjs';
 import { CircularProgressBase } from 'react-native-circular-progress-indicator';
 import { useGetUserHook } from '../../hooks/useGetUserHook';
 import CircularProgress from '../../components/CircularProgress';
+import { Water } from '../../../assets';
+import { useNavigation } from '@react-navigation/native';
+import Button from '../../components/CustomButton';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 const ProfileScreen = () => {
   const { logout } = useContext(AuthContext) as AuthContextType;
@@ -27,9 +38,12 @@ const ProfileScreen = () => {
     getUserInfo,
     calculateIntakeFood,
     calculateIntakeWater,
+    drinkWater,
   } = useGetUserHook();
 
   const [dateToday, setDateToday] = useState(dayjs().format('DD MMMM,YYYY'));
+  const [amount, setAmount] = useState('');
+
   const props = {
     activeStrokeWidth: 5,
     inActiveStrokeWidth: 5,
@@ -41,8 +55,95 @@ const ProfileScreen = () => {
     getDailyIntake();
   }, []);
 
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['25%', '40%'], []);
+
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+  const handleCloseModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.close();
+  }, []);
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+
   return (
     <LinearGradient colors={['#191C1F', '#2A3035']} style={styles.container}>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={1}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+      >
+        <LinearGradient
+          colors={['#394147', '#2A3035']}
+          style={styles.modalView}
+        >
+          <View style={styles.modalHeader}>
+            <View style={{ justifyContent: 'center', width: '100%' }}>
+              <Text style={styles.modalText}>Daily Water Tracker</Text>
+            </View>
+          </View>
+          <View style={styles.hr}></View>
+          <View
+            style={{
+              width: '85%',
+              marginTop: 50,
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+            }}
+          >
+            <TextInput
+              placeholder="1.5"
+              placeholderTextColor="gray"
+              keyboardType="numeric"
+              style={{
+                backgroundColor: '#394147',
+                padding: 15,
+                width: '35%',
+                color: 'white',
+                fontFamily: 'Montserrat',
+                shadowOffset: { width: -2, height: 4 },
+                shadowColor: '#171717',
+                shadowOpacity: 0.2,
+                shadowRadius: 3,
+                borderRadius: 10,
+              }}
+              onChangeText={setAmount}
+            ></TextInput>
+            <TextInput
+              defaultValue="l"
+              editable={false}
+              style={{
+                backgroundColor: '#394147',
+                padding: 15,
+                width: '35%',
+                color: 'white',
+                fontFamily: 'Montserrat',
+                shadowOffset: { width: -2, height: 4 },
+                shadowColor: '#171717',
+                shadowOpacity: 0.2,
+                shadowRadius: 3,
+                borderRadius: 10,
+              }}
+            ></TextInput>
+          </View>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <Button
+              title="Add water"
+              onPress={() => {
+                drinkWater(Number(amount)).then(getDailyIntake);
+                handleCloseModalPress();
+              }}
+            />
+          </View>
+        </LinearGradient>
+      </BottomSheetModal>
+
       <View style={styles.profile}>
         <View style={styles.logout}>
           <LogoutButton title="Log out" onPress={logout} />
@@ -54,10 +155,23 @@ const ProfileScreen = () => {
           source={BorkoProfil}
         />
         <View style={{ width: '100%' }}>
-          <View style={{ alignItems: 'center' }}>
+          <View
+            style={{
+              alignItems: 'center',
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}
+          >
             <Text style={styles.name}>
               {userInfo?.first_name} {userInfo?.last_name}
             </Text>
+            <TouchableOpacity onPress={handlePresentModalPress}>
+              <Image
+                source={Water}
+                resizeMode={'contain'}
+                style={{ width: 25 }}
+              />
+            </TouchableOpacity>
           </View>
 
           <View style={styles.hr}></View>

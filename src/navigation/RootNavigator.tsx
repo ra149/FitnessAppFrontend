@@ -5,6 +5,7 @@ import LoginScreen from '../screens/Login/LoginScreen';
 import TabNavigator from './TabNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthContext, { AuthContextType } from '../context/AuthContext';
+import WaterModalScreen from '../screens/WaterModal/WaterModalScreen';
 
 const RootNavigator = () => {
   const Stack = createNativeStackNavigator();

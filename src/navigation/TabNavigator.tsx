@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Colors } from '../constants/Colors';
 import { Icon } from '@rneui/themed';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
-import WorkoutsScreen from '../screens/WorkoutsScreen';
+import WorkoutsScreen from '../screens/Workout/WorkoutsScreen';
 import { color } from '@rneui/base';
 
 const Tab = createBottomTabNavigator();

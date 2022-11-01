@@ -1,3 +1,6 @@
+import { eachWeekendOfYear } from 'date-fns';
+import { daysInWeek } from 'date-fns/esm/fp';
+import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
 import Network, { URL } from '../../Network';
 import { User } from '../domain/UserInterface';
@@ -6,7 +9,10 @@ export const useGetUserHook = () => {
   const [userInfo, setUserInfo] = useState<User | null>(null);
   const [dailyIntakeFood, setDailyIntakeFood]: any = useState();
   const [dailyIntakeWater, setDailyIntakeWater]: any = useState();
-
+  var weekYear = require('dayjs/plugin/weekYear'); // dependent on weekOfYear plugin
+  var weekOfYear = require('dayjs/plugin/weekOfYear');
+  dayjs.extend(weekYear);
+  dayjs.locale;
   const getUserInfo = useCallback(() => {
     Network.get(`${URL}/user`)
       .then((res: User) => {
@@ -31,6 +37,18 @@ export const useGetUserHook = () => {
         console.log(e);
       });
   }, []);
+
+  const drinkWater = useCallback(
+    (amount: number, unit = 'l', day = 1, week = 44, year = 2022) =>
+      Network.post(`${URL}/intake/water`, {
+        amount,
+        day,
+        unit,
+        week,
+        year,
+      }),
+    []
+  );
 
   const calculateIntakeFood = useCallback((dailyIntakeFood: any) => {
     let sumProteins = 0;
@@ -63,5 +81,6 @@ export const useGetUserHook = () => {
     getDailyIntake,
     calculateIntakeFood,
     calculateIntakeWater,
+    drinkWater,
   } as const;
 };

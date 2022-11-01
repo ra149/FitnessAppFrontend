@@ -28,12 +28,17 @@ class Network {
     this.service = service;
   }
 
-  post(path: string, payload: any) {
+  async post(path: string, payload: any) {
+    const accessToken = await AsyncStorage.getItem('Authorization-token');
     return this.service
       .request({
         method: 'POST',
         url: path,
+
         data: payload ? JSON.stringify(payload) : {},
+        headers: {
+          'Authorization-token': accessToken,
+        },
       })
       .then((response: any) => response)
       .catch((error: any) => {

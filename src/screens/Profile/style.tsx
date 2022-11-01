@@ -16,7 +16,6 @@ export const styles = StyleSheet.create({
     color: '#49FFFF',
     fontSize: 26,
     fontFamily: 'Montserrat',
-    marginTop: 20,
     textShadowColor: '#49FFFF',
     textShadowRadius: 10,
   },
@@ -69,7 +68,6 @@ export const styles = StyleSheet.create({
   dateView: {
     width: '100%',
     justifyContent: 'center',
-    alignContent: 'center',
     alignItems: 'center',
   },
   date: {
@@ -88,4 +86,46 @@ export const styles = StyleSheet.create({
   },
   ratioCirclesView: { justifyContent: 'center', paddingLeft: 25 },
   ratioText: { color: 'white', fontSize: 14, fontWeight: 'bold' },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: 20,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+
+    alignItems: 'center',
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    textAlign: 'center',
+    color: '#49FFFF',
+    fontSize: 20,
+    fontFamily: 'Montserrat',
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
 });
