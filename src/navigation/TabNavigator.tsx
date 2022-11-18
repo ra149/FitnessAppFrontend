@@ -5,8 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 import { Colors } from '../constants/Colors';
 import { Icon } from '@rneui/themed';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
-import WorkoutsScreen from '../screens/Workout/WorkoutsScreen';
-import { color } from '@rneui/base';
+
+import MealPlanScreen from '../screens/MealPlan/MealPlanScreen';
+import WorkoutScreen from '../screens/Workout/WorkoutScreen';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -22,24 +24,32 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarActiveTintColor: Colors.TabActive,
-        tabBarInactiveTintColor: Colors.TabInactive,
+        tabBarActiveTintColor: Colors.turqoise,
+        tabBarInactiveTintColor: Colors.white,
         tabBarStyle: { backgroundColor: '#272C31' },
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused }) => {
           if (route.name === 'Profile') {
             return (
               <Icon
                 name="users"
                 type="entypo"
-                color={focused ? Colors.TabActive : Colors.TabInactive}
+                color={focused ? Colors.turqoise : Colors.white}
               />
             );
-          } else if (route.name === 'Training') {
+          } else if (route.name === 'MealPlan') {
             return (
-              <Icon
-                name="box"
-                type="entypo"
-                color={focused ? Colors.TabActive : Colors.TabInactive}
+              <MaterialCommunityIcons
+                name="food-apple"
+                size={28}
+                color={focused ? Colors.turqoise : Colors.white}
+              />
+            );
+          } else if (route.name === 'Workouts') {
+            return (
+              <MaterialCommunityIcons
+                name="weight-lifter"
+                size={28}
+                color={focused ? Colors.turqoise : Colors.white}
               />
             );
           }
@@ -52,8 +62,13 @@ const TabNavigator = () => {
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="Training"
-        component={WorkoutsScreen}
+        name="MealPlan"
+        component={MealPlanScreen}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Workouts"
+        component={WorkoutScreen}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>

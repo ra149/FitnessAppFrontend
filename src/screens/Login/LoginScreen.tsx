@@ -1,18 +1,17 @@
 import {
   View,
   Text,
-  StyleSheet,
   ImageBackground,
   TouchableOpacity,
   Image,
   TextInput,
   ActivityIndicator,
 } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Background } from '../../../assets';
 import { Logo } from '../../../assets';
-import Button from '../../components/CustomButton';
-import { styles } from './style';
+import Button from '../../components/CustomButton/CustomButton';
+import { styles } from './LoginScreen.styles';
 import AuthContext, { AuthContextType } from '../../context/AuthContext';
 
 const LoginScreen = () => {
@@ -57,10 +56,7 @@ const LoginScreen = () => {
               secureTextEntry
               onChangeText={setPassword}
             />
-            <TouchableOpacity
-              style={{ alignItems: 'center' }}
-              onPress={() => console.log('jebe')}
-            >
+            <TouchableOpacity style={{ alignItems: 'center' }}>
               <Text style={styles.forgotPassword}>Forgot your password?</Text>
             </TouchableOpacity>
             <View style={{ alignContent: 'center', alignItems: 'center' }}>

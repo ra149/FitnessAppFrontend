@@ -1,4 +1,4 @@
 export const Colors = {
-  TabActive: '#49FFFF',
-  TabInactive: 'white',
+  turqoise: '#49FFFF',
+  white: 'white',
 } as const;

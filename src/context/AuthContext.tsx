@@ -1,4 +1,4 @@
-import { View, Text, Alert } from 'react-native';
+import { Alert } from 'react-native';
 import React, {
   createContext,
   ReactNode,
@@ -23,7 +23,6 @@ type Props = {
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: Props) => {
-  // const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState(false);
 
@@ -36,8 +35,6 @@ export const AuthProvider = ({ children }: Props) => {
     })
       .then((res: any) => {
         let token = res.access_token;
-        console.log(res);
-        console.log(token, 'token');
         if (token != undefined) {
           AsyncStorage.setItem('Authorization-token', token);
           setIsLoading(false);
@@ -49,7 +46,6 @@ export const AuthProvider = ({ children }: Props) => {
         }
       })
       .catch((e: any) => {
-        console.log('usao');
         setIsLoading(false);
         setToken(false);
       });
@@ -60,10 +56,9 @@ export const AuthProvider = ({ children }: Props) => {
       const value = await AsyncStorage.getItem('Authorization-token');
       if (value !== null) {
         setToken(true);
-        console.log(value);
+        value;
       } else {
         setToken(false);
-        console.log('null');
       }
     } catch (error) {}
   };
@@ -72,8 +67,8 @@ export const AuthProvider = ({ children }: Props) => {
     AsyncStorage.removeItem('Authorization-token');
     setToken(false);
     retrieveToken();
-    console.log('loged out');
-    console.log(AsyncStorage.getItem('Authorization-token'));
+    ('loged out');
+    AsyncStorage.getItem('Authorization-token');
   };
 
   const restoreSession = () => {

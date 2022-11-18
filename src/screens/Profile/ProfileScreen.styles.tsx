@@ -29,6 +29,11 @@ export const styles = StyleSheet.create({
     fontFamily: 'Montserrat',
     fontSize: 16,
   },
+  smallText: {
+    color: '#49FFFF',
+    fontFamily: 'Montserrat',
+    fontSize: 12,
+  },
   statistics: {
     color: '#49FFFF',
     fontFamily: 'Montserrat',
@@ -96,6 +101,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingTop: 20,
+    backgroundColor: '#2A3035',
   },
   modalHeader: {
     flexDirection: 'row',

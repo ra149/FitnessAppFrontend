@@ -1,45 +1,52 @@
-import { eachWeekendOfYear } from 'date-fns';
-import { daysInWeek } from 'date-fns/esm/fp';
-import dayjs from 'dayjs';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import Network, { URL } from '../../Network';
-import { User } from '../domain/UserInterface';
+import {
+  IDailyIntakeResponse,
+  IMeal,
+  IUser,
+  IWater,
+  IMealSlot,
+} from '../domain/UserInterface';
+
+const { DateTime } = require('luxon');
+const dayOfWeekDigit = new Date().getDay();
 
 export const useGetUserHook = () => {
-  const [userInfo, setUserInfo] = useState<User | null>(null);
-  const [dailyIntakeFood, setDailyIntakeFood]: any = useState();
-  const [dailyIntakeWater, setDailyIntakeWater]: any = useState();
-  var weekYear = require('dayjs/plugin/weekYear'); // dependent on weekOfYear plugin
-  var weekOfYear = require('dayjs/plugin/weekOfYear');
-  dayjs.extend(weekYear);
-  dayjs.locale;
+  const [userInfo, setUserInfo] = useState<IUser | null>(null);
+  const [dailyIntakeFood, setDailyIntakeFood] = useState<IMeal | null>(null);
+  const [dailyIntakeWater, setDailyIntakeWater] = useState<IWater | null>(null);
+
   const getUserInfo = useCallback(() => {
     Network.get(`${URL}/user`)
-      .then((res: User) => {
+      .then((res: IUser) => {
         let user = res;
         setUserInfo(user);
       })
       .catch((e: any) => {
-        console.log(e);
+        e;
       });
   }, []);
 
   const getDailyIntake = useCallback(() => {
     Network.get(`${URL}/intake/today`)
-      .then((res: any) => {
+      .then((res: IDailyIntakeResponse) => {
         let dailyIntakeFood = res.intake;
         let dailyIntakeWater = res.water;
-        console.log(dailyIntakeWater);
+        dailyIntakeWater;
         setDailyIntakeFood(dailyIntakeFood);
         setDailyIntakeWater(dailyIntakeWater);
       })
-      .catch((e: any) => {
-        console.log(e);
-      });
+      .catch((e: any) => {});
   }, []);
 
   const drinkWater = useCallback(
-    (amount: number, unit = 'l', day = 1, week = 44, year = 2022) =>
+    (
+      amount: number,
+      unit = 'l',
+      day = dayOfWeekDigit,
+      week = DateTime.now().weekNumber,
+      year = DateTime.now().year
+    ) =>
       Network.post(`${URL}/intake/water`, {
         amount,
         day,
@@ -54,8 +61,7 @@ export const useGetUserHook = () => {
     let sumProteins = 0;
     let sumCarbs = 0;
     let sumFats = 0;
-
-    for (const i in dailyIntakeFood) {
+    for (let i in dailyIntakeFood) {
       sumProteins = sumProteins + parseFloat(dailyIntakeFood[i][0].proteins);
       sumCarbs = sumCarbs + parseFloat(dailyIntakeFood[i][0].carbs);
       sumFats = sumFats + parseFloat(dailyIntakeFood[i][0].fats);
@@ -69,7 +75,7 @@ export const useGetUserHook = () => {
     for (const i in dailyIntakeWater) {
       sumWater = sumWater + parseFloat(dailyIntakeWater[i].amount) / 1000;
     }
-    console.log(sumWater);
+    sumWater;
     return { sumWater };
   }, []);
 

@@ -5,6 +5,7 @@ import RootNavigator from './src/navigation/RootNavigator';
 import { useLoadFont } from './src/hooks/useFontHook';
 import { AuthProvider } from './src/context/AuthContext';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App() {
   const { fonts, loadFonts } = useLoadFont();
@@ -15,13 +16,15 @@ export default function App() {
 
   if (fonts) {
     return (
-      <BottomSheetModalProvider>
-        <AuthProvider>
-          <NavigationContainer>
-            <RootNavigator />
-          </NavigationContainer>
-        </AuthProvider>
-      </BottomSheetModalProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <BottomSheetModalProvider>
+          <AuthProvider>
+            <NavigationContainer>
+              <RootNavigator />
+            </NavigationContainer>
+          </AuthProvider>
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
     );
   }
 }

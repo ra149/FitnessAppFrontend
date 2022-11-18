@@ -1,4 +1,4 @@
-import { View, Text, Image, Alert, Pressable, TextInput } from 'react-native';
+import { View, Text, Image, Pressable, TextInput } from 'react-native';
 import React, {
   useCallback,
   useContext,
@@ -8,12 +8,12 @@ import React, {
   useState,
 } from 'react';
 import AuthContext, { AuthContextType } from '../../context/AuthContext';
-import { styles } from './style';
+import { styles } from './ProfileScreen.styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Avatar } from '@rneui/base';
 
 import { BorkoProfil } from '../../../assets';
-import LogoutButton from '../../components/LogoutButton';
+import LogoutButton from '../../components/LogoutButton/LogoutButton';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -22,11 +22,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import dayjs from 'dayjs';
 import { CircularProgressBase } from 'react-native-circular-progress-indicator';
 import { useGetUserHook } from '../../hooks/useGetUserHook';
-import CircularProgress from '../../components/CircularProgress';
+import CircularProgress from '../../components/CircularProgress/CircularProgress';
 import { Water } from '../../../assets';
 import { useNavigation } from '@react-navigation/native';
-import Button from '../../components/CustomButton';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import Button from '../../components/CustomButton/CustomButton';
+import { BottomSheetBackdrop, BottomSheetModal } from '@gorhom/bottom-sheet';
+import { useIsFocused } from '@react-navigation/native';
 
 const ProfileScreen = () => {
   const { logout } = useContext(AuthContext) as AuthContextType;
@@ -43,6 +44,7 @@ const ProfileScreen = () => {
 
   const [dateToday, setDateToday] = useState(dayjs().format('DD MMMM,YYYY'));
   const [amount, setAmount] = useState('');
+  const isFocused = useIsFocused();
 
   const props = {
     activeStrokeWidth: 5,
@@ -51,9 +53,11 @@ const ProfileScreen = () => {
   };
 
   useEffect(() => {
-    getUserInfo();
-    getDailyIntake();
-  }, []);
+    if (isFocused) {
+      getUserInfo();
+      getDailyIntake();
+    }
+  }, [isFocused]);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -67,83 +71,9 @@ const ProfileScreen = () => {
   const handleCloseModalPress = useCallback(() => {
     bottomSheetModalRef.current?.close();
   }, []);
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
 
   return (
     <LinearGradient colors={['#191C1F', '#2A3035']} style={styles.container}>
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
-        index={1}
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
-      >
-        <LinearGradient
-          colors={['#394147', '#2A3035']}
-          style={styles.modalView}
-        >
-          <View style={styles.modalHeader}>
-            <View style={{ justifyContent: 'center', width: '100%' }}>
-              <Text style={styles.modalText}>Daily Water Tracker</Text>
-            </View>
-          </View>
-          <View style={styles.hr}></View>
-          <View
-            style={{
-              width: '85%',
-              marginTop: 50,
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-            }}
-          >
-            <TextInput
-              placeholder="1.5"
-              placeholderTextColor="gray"
-              keyboardType="numeric"
-              style={{
-                backgroundColor: '#394147',
-                padding: 15,
-                width: '35%',
-                color: 'white',
-                fontFamily: 'Montserrat',
-                shadowOffset: { width: -2, height: 4 },
-                shadowColor: '#171717',
-                shadowOpacity: 0.2,
-                shadowRadius: 3,
-                borderRadius: 10,
-              }}
-              onChangeText={setAmount}
-            ></TextInput>
-            <TextInput
-              defaultValue="l"
-              editable={false}
-              style={{
-                backgroundColor: '#394147',
-                padding: 15,
-                width: '35%',
-                color: 'white',
-                fontFamily: 'Montserrat',
-                shadowOffset: { width: -2, height: 4 },
-                shadowColor: '#171717',
-                shadowOpacity: 0.2,
-                shadowRadius: 3,
-                borderRadius: 10,
-              }}
-            ></TextInput>
-          </View>
-          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <Button
-              title="Add water"
-              onPress={() => {
-                drinkWater(Number(amount)).then(getDailyIntake);
-                handleCloseModalPress();
-              }}
-            />
-          </View>
-        </LinearGradient>
-      </BottomSheetModal>
-
       <View style={styles.profile}>
         <View style={styles.logout}>
           <LogoutButton title="Log out" onPress={logout} />
@@ -165,7 +95,16 @@ const ProfileScreen = () => {
             <Text style={styles.name}>
               {userInfo?.first_name} {userInfo?.last_name}
             </Text>
-            <TouchableOpacity onPress={handlePresentModalPress}>
+            <TouchableOpacity
+              onPress={handlePresentModalPress}
+              style={{
+                borderWidth: 0.5,
+                borderRadius: 12,
+                padding: 3,
+                borderColor: '#49FFFF',
+                marginLeft: 10,
+              }}
+            >
               <Image
                 source={Water}
                 resizeMode={'contain'}
@@ -185,20 +124,24 @@ const ProfileScreen = () => {
 
           <View style={styles.infoData}>
             <Text style={styles.personalData}>{userInfo?.age} </Text>
-            <Text style={styles.personalData}>{userInfo?.info.weight}kg</Text>
-            <Text style={styles.personalData}>{userInfo?.info.height}cm</Text>
-            <Text style={styles.personalData}>{userInfo?.info.gender}</Text>
+            <Text style={styles.personalData}>
+              {Number(userInfo?.info.weight).toFixed(0)}
+              <Text style={styles.smallText}> kg</Text>
+            </Text>
+            <Text style={styles.personalData}>
+              {Number(userInfo?.info.height).toFixed(0)}{' '}
+              <Text style={styles.smallText}>cm</Text>
+            </Text>
+            <Text
+              style={{ ...styles.personalData, textTransform: 'capitalize' }}
+            >
+              {userInfo?.info.gender}
+            </Text>
           </View>
         </View>
       </View>
       <View style={styles.dailyIntakeView}>
-        <TouchableOpacity>
-          <ChevronLeftIcon size={18} color="#697177" />
-        </TouchableOpacity>
         <Text style={styles.statistics}>DAILY INTAKE</Text>
-        <TouchableOpacity>
-          <ChevronRightIcon size={18} color="#697177" />
-        </TouchableOpacity>
       </View>
       <View style={styles.dateView}>
         <Text style={styles.date}>{dateToday}</Text>
@@ -298,6 +241,74 @@ const ProfileScreen = () => {
           </View>
         </View>
       </View>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={1}
+        snapPoints={snapPoints}
+        backdropComponent={BottomSheetBackdrop}
+        backgroundStyle={{ backgroundColor: '#2A3035' }}
+      >
+        <View style={styles.modalView}>
+          <View style={styles.modalHeader}>
+            <View style={{ justifyContent: 'center', width: '100%' }}>
+              <Text style={styles.modalText}>Daily Water Tracker</Text>
+            </View>
+          </View>
+          <View style={styles.hr}></View>
+          <View
+            style={{
+              width: '85%',
+              marginTop: 50,
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+            }}
+          >
+            <TextInput
+              placeholder="1.5"
+              placeholderTextColor="gray"
+              keyboardType="numeric"
+              style={{
+                backgroundColor: '#394147',
+                padding: 15,
+                width: '35%',
+                color: 'white',
+                fontFamily: 'Montserrat',
+                shadowOffset: { width: -2, height: 4 },
+                shadowColor: '#171717',
+                shadowOpacity: 0.2,
+                shadowRadius: 3,
+                borderRadius: 10,
+              }}
+              onChangeText={setAmount}
+            ></TextInput>
+            <TextInput
+              defaultValue="l"
+              editable={false}
+              style={{
+                backgroundColor: '#394147',
+                padding: 15,
+                width: '35%',
+                color: 'white',
+                fontFamily: 'Montserrat',
+                shadowOffset: { width: -2, height: 4 },
+                shadowColor: '#171717',
+                shadowOpacity: 0.2,
+                shadowRadius: 3,
+                borderRadius: 10,
+              }}
+            ></TextInput>
+          </View>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <Button
+              title="Add water"
+              onPress={() => {
+                drinkWater(Number(amount)).then(getDailyIntake);
+                handleCloseModalPress();
+              }}
+            />
+          </View>
+        </View>
+      </BottomSheetModal>
     </LinearGradient>
   );
 };

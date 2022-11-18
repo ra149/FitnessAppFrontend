@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { loadAsync } from 'expo-font';
 
 export const useLoadFont = () => {

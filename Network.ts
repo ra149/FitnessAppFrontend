@@ -47,7 +47,6 @@ class Network {
   }
   async get(path: string) {
     const accessToken = await AsyncStorage.getItem('Authorization-token');
-    console.log(accessToken);
     return this.service
       .get(path, {
         headers: {

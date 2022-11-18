@@ -1,11 +1,8 @@
-import { View, Text } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../screens/Login/LoginScreen';
 import TabNavigator from './TabNavigator';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthContext, { AuthContextType } from '../context/AuthContext';
-import WaterModalScreen from '../screens/WaterModal/WaterModalScreen';
 
 const RootNavigator = () => {
   const Stack = createNativeStackNavigator();
